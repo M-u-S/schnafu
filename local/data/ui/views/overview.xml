@@ -1,0 +1,84 @@
+<dashboard refresh="10">
+  <label>Overview</label>
+  <description>Used during the schnafu custom command demo</description>
+  <row>
+    <panel>
+      <title>Forwarding Cluster Site1</title>
+      <table>
+        <search>
+          <query>| rest splunk_server=local /services/cluster/master/peers | table  label status is_searchable site splunk_version | search site=site1</query>
+          <earliest>-24h@h</earliest>
+          <latest>now</latest>
+          <sampleRatio>1</sampleRatio>
+        </search>
+        <option name="count">20</option>
+        <option name="dataOverlayMode">none</option>
+        <option name="drilldown">none</option>
+        <option name="percentagesRow">false</option>
+        <option name="refresh.display">progressbar</option>
+        <option name="rowNumbers">false</option>
+        <option name="totalsRow">false</option>
+        <option name="wrap">true</option>
+      </table>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>Indexer Cluster Site2</title>
+      <table>
+        <search>
+          <query>| rest splunk_server=local /services/cluster/master/peers | table  label status  is_searchable site splunk_version | search site=site2</query>
+          <earliest>-24h@h</earliest>
+          <latest>now</latest>
+          <sampleRatio>1</sampleRatio>
+        </search>
+        <option name="count">20</option>
+        <option name="dataOverlayMode">none</option>
+        <option name="drilldown">none</option>
+        <option name="percentagesRow">false</option>
+        <option name="refresh.display">progressbar</option>
+        <option name="rowNumbers">false</option>
+        <option name="totalsRow">false</option>
+        <option name="wrap">true</option>
+      </table>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>Deployment Server Clients</title>
+      <table>
+        <search>
+          <query>| rest splunk_server=local /services/deployment/server/clients | table hostname ip lastPhoneHomeTime splunkVersion | eval lastPhoneHomeTime=now()-lastPhoneHomeTime, lastPhoneHomeTime=strftime(lastPhoneHomeTime, "%H:%M:%S")</query>
+          <earliest>-24h@h</earliest>
+          <latest>now</latest>
+          <sampleRatio>1</sampleRatio>
+        </search>
+        <option name="count">20</option>
+        <option name="dataOverlayMode">none</option>
+        <option name="drilldown">none</option>
+        <option name="percentagesRow">false</option>
+        <option name="rowNumbers">false</option>
+        <option name="totalsRow">false</option>
+        <option name="wrap">true</option>
+      </table>
+    </panel>
+    <panel>
+      <title>Deployment Server Last Reload</title>
+      <table>
+        <search>
+          <query>| rest splunk_server=local /services/deployment/server/config | table splunk_server loadTime currentDownloads | rename splunk_server AS hostname | eval loadTime=now()-loadTime, loadTime=strftime(loadTime, "%H:%M:%S")</query>
+          <earliest>-24h@h</earliest>
+          <latest>now</latest>
+          <sampleRatio>1</sampleRatio>
+        </search>
+        <option name="count">20</option>
+        <option name="dataOverlayMode">none</option>
+        <option name="drilldown">none</option>
+        <option name="percentagesRow">false</option>
+        <option name="rowNumbers">false</option>
+        <option name="totalsRow">false</option>
+        <option name="wrap">true</option>
+      </table>
+    </panel>
+  </row>
+</dashboard>
